@@ -1,6 +1,7 @@
 package com.iffecode.lifecycle_v6;
 
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        Button login = findViewById(R.id.LoginBtn);
 
 
 
