@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         //kommentar
+        //hello
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
