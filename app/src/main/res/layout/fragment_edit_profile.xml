@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/editProfileMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".EditProfileFragment">
+
+
+    <TextView
+        android:id="@+id/editProfileTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Edit Profile"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/nameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="40dp"
+        android:text="Name:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editProfileTitle" />
+
+    <EditText
+        android:id="@+id/nameInput"
+        android:layout_width="190dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="15dp"
+        android:hint="Name"
+        android:inputType="text"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/nameLabel"
+        app:layout_constraintStart_toEndOf="@+id/nameLabel" />
+
+
+    <TextView
+        android:id="@+id/heightLabel"
+        android:layout_width="66dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="35dp"
+        android:text="Height:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/nameLabel"
+        app:layout_constraintTop_toBottomOf="@+id/nameLabel" />
+
+    <EditText
+        android:id="@+id/heightInput"
+        android:layout_width="131dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="20dp"
+        android:hint="cm"
+        android:inputType="numberDecimal"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/heightLabel"
+        app:layout_constraintStart_toEndOf="@+id/heightLabel" />
+
+
+    <TextView
+        android:id="@+id/weightLabel"
+        android:layout_width="64dp"
+        android:layout_height="35dp"
+        android:layout_marginTop="35dp"
+        android:text="Weight:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/heightLabel"
+        app:layout_constraintTop_toBottomOf="@+id/heightLabel" />
+
+    <EditText
+        android:id="@+id/weightInput"
+        android:layout_width="131dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="15dp"
+        android:hint="kg"
+        android:inputType="numberDecimal"
+        android:textSize="18sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/weightLabel"
+        app:layout_constraintStart_toEndOf="@+id/weightLabel" />
+
+
+    <TextView
+        android:id="@+id/genderLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="28dp"
+        android:text="Gender:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weightLabel" />
+
+    <Spinner
+        android:id="@+id/genderSpinner"
+        android:layout_width="227dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/genderLabel"
+        app:layout_constraintStart_toEndOf="@+id/genderLabel"
+        app:layout_constraintTop_toTopOf="@+id/genderLabel"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/dateLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:text="Date Of Birth:"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/genderLabel"
+        app:layout_constraintTop_toBottomOf="@+id/genderLabel" />
+
+    <Button
+        android:id="@+id/dateButton"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="Select Date"
+        app:layout_constraintBaseline_toBaselineOf="@+id/dateLabel"
+        app:layout_constraintStart_toEndOf="@+id/dateLabel" />
+
+    <Button
+        android:id="@+id/updateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="38dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginBottom="82dp"
+        android:text="Save Changes"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/dateButton"
+        app:layout_constraintStart_toStartOf="@+id/editProfileTitle" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
