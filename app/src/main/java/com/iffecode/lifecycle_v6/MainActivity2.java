@@ -296,7 +296,6 @@ implements SensorEventListener {
                     lastStepTime = currentTime;
                 }
             }
-
             lastMagnitude = magnitude;
         }
     }
