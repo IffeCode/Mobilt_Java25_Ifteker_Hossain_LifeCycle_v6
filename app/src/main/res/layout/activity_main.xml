@@ -48,20 +48,24 @@
         android:id="@+id/UserInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="37dp"
         android:ems="10"
         android:inputType="text"
         android:text="Enter Username"
-        tools:layout_editor_absoluteX="98dp"
-        tools:layout_editor_absoluteY="316dp" />
+        app:layout_constraintBottom_toTopOf="@+id/LoginBtn"
+        app:layout_constraintEnd_toEndOf="@+id/UserPassword" />
 
     <EditText
         android:id="@+id/UserPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="39dp"
+        android:layout_marginEnd="1dp"
         android:ems="10"
         android:inputType="textPassword"
         android:text="Enter Password"
-        tools:layout_editor_absoluteX="100dp"
-        tools:layout_editor_absoluteY="355dp" />
+        app:layout_constraintEnd_toEndOf="@+id/LoginBtn"
+        app:layout_constraintTop_toTopOf="@+id/UserInput" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
