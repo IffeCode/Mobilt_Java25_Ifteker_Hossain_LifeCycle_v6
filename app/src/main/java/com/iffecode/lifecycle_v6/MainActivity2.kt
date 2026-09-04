@@ -1,77 +1,66 @@
-package com.iffecode.lifecycle_v6;
+package com.iffecode.lifecycle_v6
 
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.FrameLayout
+import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.OnApplyWindowInsetsListener
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import kotlin.math.sqrt
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-public class MainActivity2 extends AppCompatActivity
-implements SensorEventListener {
-
-    private TextView stepCountText;
-    private SensorManager sensorManager;
-    private Sensor accelerometer;
-    private long lastStepTime;
-    private Sensor stepCounter;
-    private boolean usingStepCounter = false;
-    private int steps = 0;
-    private float lastMagnitude = 0f;
-    private TextView heightText;
-    private TextView weightText;
-    private TextView genderText;
-    private TextView dateOfBirthText;
-    private TextView bmiText;
+class MainActivity2 : AppCompatActivity(), SensorEventListener {
+    private var stepCountText: TextView? = null
+    private var sensorManager: SensorManager? = null
+    private var accelerometer: Sensor? = null
+    private var lastStepTime: Long = 0
+    private var stepCounter: Sensor? = null
+    private var usingStepCounter = false
+    private var steps = 0
+    private var lastMagnitude = 0f
+    private var heightText: TextView? = null
+    private var weightText: TextView? = null
+    private var genderText: TextView? = null
+    private var dateOfBirthText: TextView? = null
+    private var bmiText: TextView? = null
+    private var nameText: TextView? = null
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main2);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        this.enableEdgeToEdge()
+        setContentView(R.layout.activity_main2)
 
-        stepCountText = findViewById(R.id.textView14);
+        stepCountText = findViewById<TextView>(R.id.textView14)
 
         sensorManager =
-                (SensorManager) getSystemService(SENSOR_SERVICE);
+            getSystemService(SENSOR_SERVICE) as SensorManager
         stepCounter =
-                sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            sensorManager!!.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
 
         accelerometer =
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+            sensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
         if (stepCounter != null) {
+            usingStepCounter = true
 
-            usingStepCounter = true;
-
-            stepCountText.setText("0");
-
+            stepCountText!!.setText("0")
         } else {
-
-            usingStepCounter = false;
+            usingStepCounter = false
 
             if (accelerometer != null) {
-
-                stepCountText.setText("0");
-
+                stepCountText!!.setText("0")
             } else {
-
-                stepCountText.setText(
-                        "Step Counter and Accelerometer not supported"
-                );
+                stepCountText!!.setText(
+                    "Step Counter and Accelerometer not supported"
+                )
             }
         }
 
@@ -80,223 +69,192 @@ implements SensorEventListener {
 
 
 
-        heightText = findViewById(R.id.textView19);
-        weightText = findViewById(R.id.textView20);
-        genderText = findViewById(R.id.textView21);
-        dateOfBirthText = findViewById(R.id.textView23);
-        bmiText = findViewById(R.id.textView25);
+        heightText = findViewById<TextView>(R.id.textView19)
+        weightText = findViewById<TextView>(R.id.textView20)
+        genderText = findViewById<TextView>(R.id.textView21)
+        dateOfBirthText = findViewById<TextView>(R.id.textView23)
+        bmiText = findViewById<TextView>(R.id.textView25)
+        nameText = findViewById<TextView>(R.id.nameText)
 
-        Button edit = findViewById(R.id.UpdateBtn);
+        val edit = findViewById<Button>(R.id.UpdateBtn)
 
-        FrameLayout fragmentContainer = findViewById(R.id.fragmentContainer);
+        val fragmentContainer = findViewById<FrameLayout>(R.id.fragmentContainer)
 
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                fragmentContainer.setVisibility(View.VISIBLE);
+        edit.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                fragmentContainer.setVisibility(View.VISIBLE)
 
 
-                EditProfileFragment fragment = new EditProfileFragment();
+                val fragment = EditProfileFragment()
 
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragmentContainer,
-                                fragment)
-                        .addToBackStack(null)
-                        .commit();
+                getSupportFragmentManager().beginTransaction().replace(
+                    R.id.fragmentContainer,
+                    fragment
+                )
+                    .addToBackStack(null)
+                    .commit()
             }
-        });
+        })
 
 
 
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        ViewCompat.setOnApplyWindowInsetsListener(
+            findViewById<View?>(R.id.main),
+            OnApplyWindowInsetsListener { v: View?, insets: WindowInsetsCompat? ->
+                val systemBars = insets!!.getInsets(WindowInsetsCompat.Type.systemBars())
+                v!!.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                insets
+            })
 
-        loadProfileData();
+        loadProfileData()
     }
 
-    private void loadProfileData(){
-        SharedPreferences preferences =
-                getSharedPreferences("profile", MODE_PRIVATE);
+    private fun loadProfileData() {
+        val preferences =
+            getSharedPreferences("profile", MODE_PRIVATE)
 
 
-        String height =
-                preferences.getString("height", "");
+        val name: String =
+            preferences.getString("name", "")!!
 
-        String weight =
-                preferences.getString("weight", "");
+        val height: String =
+            preferences.getString("height", "")!!
 
-        String gender =
-                preferences.getString("gender", "");
+        val weight: String =
+            preferences.getString("weight", "")!!
 
-        String dateOfBirth =
-                preferences.getString("dateOfBirth", "");
+        val gender: String =
+            preferences.getString("gender", "")!!
 
+        val dateOfBirth: String =
+            preferences.getString("dateOfBirth", "")!!
+
+        if (!name.isEmpty()) {
+            nameText!!.setText(name)
+        }else {
+            nameText!!.setText("Not set")
+        }
 
         if (!height.isEmpty()) {
-
-            heightText.setText(height + " cm");
-
+            heightText!!.setText(height + " cm")
         } else {
-
-            heightText.setText("Not set");
+            heightText!!.setText("Not set")
         }
 
 
         if (!weight.isEmpty()) {
-
-            weightText.setText(weight + " kg");
-
+            weightText!!.setText(weight + " kg")
         } else {
-
-            weightText.setText("Not set");
+            weightText!!.setText("Not set")
         }
 
         if (!gender.isEmpty()) {
-
-            genderText.setText(gender);
-
+            genderText!!.setText(gender)
         } else {
-
-            genderText.setText("Not set");
+            genderText!!.setText("Not set")
         }
 
         if (!dateOfBirth.isEmpty()) {
-
-            dateOfBirthText.setText(dateOfBirth);
-
+            dateOfBirthText!!.setText(dateOfBirth)
         } else {
-
-            dateOfBirthText.setText("Not set");
+            dateOfBirthText!!.setText("Not set")
         }
 
-        calculateBMI(height, weight);
+        calculateBMI(height, weight)
     }
 
-    private void calculateBMI(String height, String weight){
-
+    private fun calculateBMI(height: String, weight: String) {
         if (height.isEmpty() || weight.isEmpty()) {
+            bmiText!!.setText("Not set")
 
-            bmiText.setText("Not set");
-
-            return;
+            return
         }
 
 
         try {
+            val heightCm = height.toDouble()
 
-            double heightCm =
-                    Double.parseDouble(height);
-
-            double weightKg =
-                    Double.parseDouble(weight);
+            val weightKg = weight.toDouble()
 
 
-            double heightMeters =
-                    heightCm / 100;
+            val heightMeters =
+                heightCm / 100
 
 
-            double bmi =
-                    weightKg /
-                            (heightMeters * heightMeters);
+            val bmi =
+                weightKg /
+                        (heightMeters * heightMeters)
 
 
             // Visa BMI med en decimal
-            bmiText.setText(
-                    String.format("%.1f", bmi)
-            );
-
-
-        } catch (NumberFormatException e) {
-
-            bmiText.setText("Not set");
+            bmiText!!.setText(
+                String.format("%.1f", bmi)
+            )
+        } catch (e: NumberFormatException) {
+            bmiText!!.setText("Not set")
         }
     }
 
-    @Override
-    protected void onResume() {
+    override fun onResume() {
+        super.onResume()
 
-        super.onResume();
-
-        loadProfileData();
+        loadProfileData()
 
         if (usingStepCounter && stepCounter != null) {
-
-            sensorManager.registerListener(
-                    this,
-                    stepCounter,
-                    SensorManager.SENSOR_DELAY_NORMAL
-            );
-
+            sensorManager!!.registerListener(
+                this,
+                stepCounter,
+                SensorManager.SENSOR_DELAY_NORMAL
+            )
         } else if (accelerometer != null) {
-
-            sensorManager.registerListener(
-                    this,
-                    accelerometer,
-                    SensorManager.SENSOR_DELAY_GAME
-            );
+            sensorManager!!.registerListener(
+                this,
+                accelerometer,
+                SensorManager.SENSOR_DELAY_GAME
+            )
         }
-
-
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    override fun onPause() {
+        super.onPause()
 
-        sensorManager.unregisterListener(this);
+        sensorManager!!.unregisterListener(this)
     }
 
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-
+    override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+            val totalSteps = event.values[0].toInt()
 
-            int totalSteps = (int) event.values[0];
+            stepCountText!!.setText(
+                totalSteps.toString()
+            )
+        } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            val x = event.values[0]
+            val y = event.values[1]
+            val z = event.values[2]
 
-            stepCountText.setText(
-                    String.valueOf(totalSteps)
-            );
-
-        }
-
-        else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
-
-            float magnitude =
-                    (float) Math.sqrt(
-                            x * x +
-                                    y * y +
-                                    z * z
-                    );
+            val magnitude = sqrt(
+                (x * x + y * y + z * z).toDouble()
+            ).toFloat()
 
             if (magnitude - lastMagnitude > 2.0f) {
-
-                long currentTime = System.currentTimeMillis();
+                val currentTime = System.currentTimeMillis()
 
                 if (currentTime - lastStepTime > 500) {
+                    steps++
 
-                    steps++;
+                    stepCountText!!.setText(
+                        steps.toString()
+                    )
 
-                    stepCountText.setText(
-                            String.valueOf(steps)
-                    );
-
-                    lastStepTime = currentTime;
+                    lastStepTime = currentTime
                 }
             }
-            lastMagnitude = magnitude;
+            lastMagnitude = magnitude
         }
     }
 }
