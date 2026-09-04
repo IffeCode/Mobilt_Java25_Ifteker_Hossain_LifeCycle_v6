@@ -25,6 +25,7 @@ implements SensorEventListener {
     private TextView stepCountText;
     private SensorManager sensorManager;
     private Sensor accelerometer;
+    private long lastStepTime;
     private Sensor stepCounter;
     private boolean usingStepCounter = false;
     private int steps = 0;
@@ -282,11 +283,18 @@ implements SensorEventListener {
 
             if (magnitude - lastMagnitude > 2.0f) {
 
-                steps++;
+                long currentTime = System.currentTimeMillis();
 
-                stepCountText.setText(
-                        String.valueOf(steps)
-                );
+                if (currentTime - lastStepTime > 500) {
+
+                    steps++;
+
+                    stepCountText.setText(
+                            String.valueOf(steps)
+                    );
+
+                    lastStepTime = currentTime;
+                }
             }
 
             lastMagnitude = magnitude;
