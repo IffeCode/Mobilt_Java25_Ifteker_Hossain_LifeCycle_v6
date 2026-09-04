@@ -25,10 +25,10 @@ implements SensorEventListener {
     private TextView stepCountText;
     private SensorManager sensorManager;
     private Sensor accelerometer;
-
-    private int stepCount = 0;
-
-    private boolean isMovingUp = false;
+    private Sensor stepCounter;
+    private boolean usingStepCounter = false;
+    private int steps = 0;
+    private float lastMagnitude = 0f;
     private TextView heightText;
     private TextView weightText;
     private TextView genderText;
@@ -46,12 +46,32 @@ implements SensorEventListener {
 
         sensorManager =
                 (SensorManager) getSystemService(SENSOR_SERVICE);
+        stepCounter =
+                sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
 
         accelerometer =
                 sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        if (accelerometer == null) {
-            stepCountText.setText("Accelerometer not available");
+        if (stepCounter != null) {
+
+            usingStepCounter = true;
+
+            stepCountText.setText("0");
+
+        } else {
+
+            usingStepCounter = false;
+
+            if (accelerometer != null) {
+
+                stepCountText.setText("0");
+
+            } else {
+
+                stepCountText.setText(
+                        "Step Counter and Accelerometer not supported"
+                );
+            }
         }
 
 
@@ -202,14 +222,23 @@ implements SensorEventListener {
 
         loadProfileData();
 
-        if (accelerometer != null) {
+        if (usingStepCounter && stepCounter != null) {
+
+            sensorManager.registerListener(
+                    this,
+                    stepCounter,
+                    SensorManager.SENSOR_DELAY_NORMAL
+            );
+
+        } else if (accelerometer != null) {
 
             sensorManager.registerListener(
                     this,
                     accelerometer,
-                    SensorManager.SENSOR_DELAY_NORMAL
+                    SensorManager.SENSOR_DELAY_GAME
             );
         }
+
 
     }
 
@@ -228,26 +257,39 @@ implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+        if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
 
+            int totalSteps = (int) event.values[0];
+
+            stepCountText.setText(
+                    String.valueOf(totalSteps)
+            );
+
+        }
+
+        else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+
+            float x = event.values[0];
             float y = event.values[1];
+            float z = event.values[2];
 
-            // Mobilen har flyttats upp
-            if (y > 0.3f && !isMovingUp) {
-                isMovingUp = true;
-            }
+            float magnitude =
+                    (float) Math.sqrt(
+                            x * x +
+                                    y * y +
+                                    z * z
+                    );
 
-            // Mobilen har sedan flyttats ner = 1 steg
-            if (y < -0.3f && isMovingUp) {
+            if (magnitude - lastMagnitude > 2.0f) {
 
-                stepCount++;
+                steps++;
 
                 stepCountText.setText(
-                        String.valueOf(stepCount)
+                        String.valueOf(steps)
                 );
-
-                isMovingUp = false;
             }
+
+            lastMagnitude = magnitude;
         }
     }
 }
