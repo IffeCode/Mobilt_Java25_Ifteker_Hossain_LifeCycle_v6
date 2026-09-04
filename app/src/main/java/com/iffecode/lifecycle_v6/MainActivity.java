@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //kommentar
         //hello
+        //blabla
 
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
